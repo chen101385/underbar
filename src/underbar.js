@@ -48,7 +48,7 @@
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
       if (Array.isArray(collection)) {
-          for (var i=0; i < collection.length; i++) {
+          for (var i = 0; i < collection.length; i++) {
               iterator(collection[i], i, collection);
           }
       } else {
@@ -105,38 +105,34 @@
       
 
   // Produce a duplicate-free version of the array.
+    /*
+    check for uniqueness: filter?  object filtering?
+    return values that are not already present;
+    
+    */
   _.uniq = function(array, isSorted, iterator) {
-  	var uniqueResults = {},
-  	results = [];
-  	//newArray = [];
-
-  /*
-  	if (typeof iterator === 'function') {
-
-  	  for (var i = 0; i < array.length; i++) {
-  		if (iterator(array[i])) {
-  			newArray.push(array[i]);
-  		};
-  	  };
-
+  	var input = array.slice(),
+    unique = [],
+    result = [],
+    method,
+    output;
+      
+    if (typeof iterator === 'function') {
+        method = iterator;
     } else {
-  
-
-      newArray = array.slice();
-    }
-  */
-  	//eliminate duplicates by setting them to keys in objects; no duplicate keys allowed;
-
-    _.each(array, function(element) {
-    	uniqueResults[element] = element;
+        method = _.identity;
+    }; 
+      
+    _.each(input, function(value) {
+      output = method(value);
+      if (_.indexOf(unique, output) === -1) {
+          unique.push(output);
+          result.push(value);
+      }; 
     });
-
-    _.each(uniqueResults, function(key) {
-      results.push(key);
-    });
-
-    return results;
-  };
+      
+    return result;
+    };
 
 
   // Return the results of applying an iterator to each element. 
@@ -393,14 +389,13 @@
   	var results = {};
 
   	return function() {
-     
-      var key = JSON.stringify(arguments)
-
-  	  if (!(results.hasOwnProperty(key))) {
+      var key = JSON.stringify(arguments);
+      //check whether func(arguments) is present in results;  
+      if (!(results.hasOwnProperty(key))) {
   	    results[key] = func.apply(this, arguments);	
-  	  };
-  	  return results[key];
-  	};
+  	    }; 
+        return results[key];
+      }; 
   };
 
   // Delays a function for the given number of milliseconds, and then calls
